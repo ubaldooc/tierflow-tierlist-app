@@ -8,6 +8,7 @@ const deleteButton = document.getElementById("delete-button");
 const deleteZone = document.getElementById("delete-zone");
 const mainTierlistContainer = document.getElementById("tierlist");
 const addRowBtn = document.getElementById("id_add-row-btn");
+const newTierBtn = document.getElementById("new-tier-button");
 const exportJsonBtn = document.getElementById("export-json-button");
 const importJsonInput = document.getElementById("import-json-input");
 const fullscreenBtn = document.getElementById("fullscreen-button");
@@ -121,14 +122,14 @@ const createRowElement = (name = "NEW", color = "#333") => {
     row.className = "row";
 
     row.innerHTML = `
-        <div class="row-name" contenteditable="true" spellcheck="false" style="background-color: ${color}">${name}</div>
-        <div class="row-items"></div>
         <div class="row-actions">
             <button class="btn-move-up" title="Subir"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg></button>
             <button class="btn-move-down" title="Bajar"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></button>
             <input type="color" value="${rgbToHex(color)}" title="Color de fila">
             <button class="btn-delete-row" title="Eliminar fila"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg></button>
         </div>
+        <div class="row-name" contenteditable="true" spellcheck="false" style="background-color: ${color}">${name}</div>
+        <div class="row-items"></div>
     `;
 
     // Events for the new row
@@ -278,12 +279,33 @@ addRowBtn.addEventListener("click", () => {
     saveTierlistState();
 });
 
+// NEW TIERLIST (Hard Reset)
+const resetToDefaultTierlist = () => {
+    showCustomConfirm("¿Crear nueva Tierlist? Se borrarán todas las filas personalizadas y las imágenes.", () => {
+        // Clear all images
+        document.querySelectorAll(".draggable-image").forEach(item => item.remove());
+
+        // Reset rows to default
+        mainTierlistContainer.innerHTML = "";
+        const defaults = [
+            { n: "S", c: "#ff4d4d" }, { n: "A", c: "#ff9f43" },
+            { n: "B", c: "#feca57" }, { n: "C", c: "#1dd1a1" }, { n: "E", c: "#54a0ff" }
+        ];
+        defaults.forEach(d => mainTierlistContainer.appendChild(createRowElement(d.n, d.c)));
+
+        refreshSortables();
+        saveTierlistState();
+    });
+};
+
 // RESET TIERLIST (Move items back to container)
 const resetTierlist = () => {
-    const itemsInTiers = document.querySelectorAll(".row-items .draggable-image");
-    itemsInTiers.forEach(item => imgsAddedContainer.appendChild(item));
-    refreshSortables();
-    saveTierlistState();
+    showCustomConfirm("¿Mover todas las imágenes al contenedor inferior?", () => {
+        const itemsInTiers = document.querySelectorAll(".row-items .draggable-image");
+        itemsInTiers.forEach(item => imgsAddedContainer.appendChild(item));
+        refreshSortables();
+        saveTierlistState();
+    });
 };
 
 // DELETE ALL ITEMS
@@ -443,6 +465,7 @@ imgsAddedContainer.addEventListener('drop', (e) => {
 });
 
 // EVENT LISTENERS
+newTierBtn.addEventListener("click", resetToDefaultTierlist);
 resetTierButton.addEventListener("click", resetTierlist);
 deleteButton.addEventListener("click", deleteAllItems);
 addImgBtn.addEventListener('change', (e) => addImagesToContainer(e.target.files));
