@@ -141,7 +141,7 @@ const createRowElement = (name = "NEW", color = "#333") => {
         }, 0);
     });
 
-    // Handle Enter and ESC keys
+    // Handle Enter and ESC keys + Max length
     nameDiv.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
             e.preventDefault();
@@ -150,9 +150,23 @@ const createRowElement = (name = "NEW", color = "#333") => {
         if (e.key === "Escape") {
             nameDiv.blur();
         }
+
+        // Bloquear escritura si excede 40 chars (excepto teclas de control)
+        if (nameDiv.innerText.length >= 40 &&
+            e.key !== "Backspace" &&
+            e.key !== "Delete" &&
+            !e.key.startsWith("Arrow")) {
+            e.preventDefault();
+        }
     });
 
-    nameDiv.addEventListener("input", saveTierlistState);
+    nameDiv.addEventListener("input", () => {
+        // Doble validación para copiado/pegado
+        if (nameDiv.innerText.length > 40) {
+            nameDiv.innerText = nameDiv.innerText.substring(0, 40);
+        }
+        saveTierlistState();
+    });
 
     row.querySelector("input[type='color']").addEventListener("input", (e) => {
         nameDiv.style.backgroundColor = e.target.value;

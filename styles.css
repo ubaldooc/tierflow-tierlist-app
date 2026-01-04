@@ -99,7 +99,7 @@ body {
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #000;
     text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
     outline: none;
@@ -109,6 +109,12 @@ body {
     text-align: center;
     position: relative;
     border-right: 1px solid rgba(0, 0, 0, 0.1);
+
+    /* Prevenir desbordamiento de texto largo */
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    line-height: 1.2;
+    max-height: 100%;
 }
 
 .row-name:focus {
