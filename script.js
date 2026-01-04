@@ -146,22 +146,27 @@ const createRowElement = (name = "NEW", color = "#333") => {
         if (e.key === "Enter") {
             e.preventDefault();
             nameDiv.blur();
+            return;
         }
         if (e.key === "Escape") {
             nameDiv.blur();
+            return;
         }
 
-        // Bloquear escritura si excede 40 chars (excepto teclas de control)
-        if (nameDiv.innerText.length >= 40 &&
-            e.key !== "Backspace" &&
-            e.key !== "Delete" &&
-            !e.key.startsWith("Arrow")) {
+        // Permitir teclas de control
+        const isControlKey = e.key === "Backspace" || e.key === "Delete" || e.key.startsWith("Arrow") || e.ctrlKey || e.metaKey;
+        if (isControlKey) return;
+
+        // Permitir escribir si hay selección (se va a reemplazar)
+        const hasSelection = window.getSelection().toString().length > 0;
+
+        // Bloquear si excede 40 chars y no hay selección
+        if (nameDiv.innerText.length >= 40 && !hasSelection) {
             e.preventDefault();
         }
     });
 
     nameDiv.addEventListener("input", () => {
-        // Doble validación para copiado/pegado
         if (nameDiv.innerText.length > 40) {
             nameDiv.innerText = nameDiv.innerText.substring(0, 40);
         }
@@ -360,7 +365,6 @@ const importFromJson = (e) => {
     reader.onload = (event) => {
         try {
             const state = JSON.parse(event.target.result);
-            // Re-use logic from loadTierlistState but with external data
             mainTierlistContainer.innerHTML = "";
             state.rows.forEach(rowData => {
                 const newRow = createRowElement(rowData.name, rowData.color);
@@ -383,7 +387,7 @@ const importFromJson = (e) => {
             alert("¡Tierlist importada con éxito!");
         } catch (err) {
             console.error("Error importing JSON:", err);
-            alert("Error al importar el archivo JSON. Asegúrate de que es un archivo válido.");
+            alert("Error al importar el archivo JSON.");
         }
     };
     reader.readAsText(file);
@@ -407,6 +411,19 @@ captureButton.addEventListener('click', () => {
     });
 });
 
+// FULLSCREEN TOGGLE
+const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            alert(`Error al intentar activar pantalla completa: ${err.message}`);
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+};
+
 // GLOBAL DRAG EVENTS
 document.addEventListener('dragover', e => e.preventDefault());
 document.addEventListener('drop', e => {
@@ -424,19 +441,6 @@ imgsAddedContainer.addEventListener('drop', (e) => {
     imgsAddedContainer.classList.remove("drop-explorer");
     addImagesToContainer(e.dataTransfer.files);
 });
-
-// FULLSCREEN TOGGLE
-const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            alert(`Error al intentar activar pantalla completa: ${err.message}`);
-        });
-    } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        }
-    }
-};
 
 // EVENT LISTENERS
 resetTierButton.addEventListener("click", resetTierlist);
