@@ -351,3 +351,14 @@ body {
         height: 60px;
     }
 }
+
+/* Fullscreen specific */
+:fullscreen body {
+    padding: 4rem 2rem;
+    background-color: var(--bg-main);
+    overflow-y: auto;
+}
+
+:fullscreen .header-logo {
+    margin-bottom: 4rem;
+}

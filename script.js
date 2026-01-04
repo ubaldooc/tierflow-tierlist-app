@@ -10,6 +10,7 @@ const mainTierlistContainer = document.getElementById("tierlist");
 const addRowBtn = document.getElementById("id_add-row-btn");
 const exportJsonBtn = document.getElementById("export-json-button");
 const importJsonInput = document.getElementById("import-json-input");
+const fullscreenBtn = document.getElementById("fullscreen-button");
 
 // --- LOCAL STORAGE PERSISTENCE ---
 
@@ -361,9 +362,23 @@ imgsAddedContainer.addEventListener('drop', (e) => {
     addImagesToContainer(e.dataTransfer.files);
 });
 
+// FULLSCREEN TOGGLE
+const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            alert(`Error al intentar activar pantalla completa: ${err.message}`);
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+};
+
 // EVENT LISTENERS
 resetTierButton.addEventListener("click", resetTierlist);
 deleteButton.addEventListener("click", deleteAllItems);
 addImgBtn.addEventListener('change', (e) => addImagesToContainer(e.target.files));
 exportJsonBtn.addEventListener("click", exportToJson);
 importJsonInput.addEventListener("change", importFromJson);
+fullscreenBtn.addEventListener("click", toggleFullscreen);
