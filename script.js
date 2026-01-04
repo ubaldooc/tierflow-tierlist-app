@@ -8,6 +8,8 @@ const deleteButton = document.getElementById("delete-button");
 const deleteZone = document.getElementById("delete-zone");
 const mainTierlistContainer = document.getElementById("tierlist");
 const addRowBtn = document.getElementById("id_add-row-btn");
+const exportJsonBtn = document.getElementById("export-json-button");
+const importJsonInput = document.getElementById("import-json-input");
 
 // --- LOCAL STORAGE PERSISTENCE ---
 
@@ -254,6 +256,75 @@ const addImagesToContainer = (filesToAdd) => {
     });
 };
 
+// EXPORT JSON
+const exportToJson = () => {
+    const state = {
+        rows: [],
+        unranked: []
+    };
+
+    document.querySelectorAll(".row").forEach(row => {
+        const rowName = row.querySelector(".row-name").innerText;
+        const rowBg = row.querySelector(".row-name").style.backgroundColor;
+        const items = Array.from(row.querySelectorAll(".row-items img, .row-items video")).map(item => ({
+            type: item.tagName.toLowerCase(),
+            src: item.src
+        }));
+        state.rows.push({ name: rowName, color: rowBg, items });
+    });
+
+    state.unranked = Array.from(imgsAddedContainer.querySelectorAll(".draggable-image")).map(item => ({
+        type: item.tagName.toLowerCase(),
+        src: item.src
+    }));
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "tierlist_data.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+};
+
+// IMPORT JSON
+const importFromJson = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        try {
+            const state = JSON.parse(event.target.result);
+            // Re-use logic from loadTierlistState but with external data
+            mainTierlistContainer.innerHTML = "";
+            state.rows.forEach(rowData => {
+                const newRow = createRowElement(rowData.name, rowData.color);
+                mainTierlistContainer.appendChild(newRow);
+                const rowItemsDiv = newRow.querySelector(".row-items");
+                rowData.items.forEach(itemData => {
+                    const el = createMediaElement(itemData.src, itemData.type === 'video');
+                    rowItemsDiv.appendChild(el);
+                });
+            });
+
+            imgsAddedContainer.innerHTML = "";
+            state.unranked.forEach(itemData => {
+                const el = createMediaElement(itemData.src, itemData.type === 'video');
+                imgsAddedContainer.appendChild(el);
+            });
+
+            refreshSortables();
+            saveTierlistState();
+            alert("¡Tierlist importada con éxito!");
+        } catch (err) {
+            console.error("Error importing JSON:", err);
+            alert("Error al importar el archivo JSON. Asegúrate de que es un archivo válido.");
+        }
+    };
+    reader.readAsText(file);
+};
+
 // SNAPSHOT CAPTURE
 captureButton.addEventListener('click', () => {
     if (!mainTierlistContainer) return;
@@ -294,3 +365,5 @@ imgsAddedContainer.addEventListener('drop', (e) => {
 resetTierButton.addEventListener("click", resetTierlist);
 deleteButton.addEventListener("click", deleteAllItems);
 addImgBtn.addEventListener('change', (e) => addImagesToContainer(e.target.files));
+exportJsonBtn.addEventListener("click", exportToJson);
+importJsonInput.addEventListener("change", importFromJson);
