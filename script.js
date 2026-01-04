@@ -12,6 +12,36 @@ const exportJsonBtn = document.getElementById("export-json-button");
 const importJsonInput = document.getElementById("import-json-input");
 const fullscreenBtn = document.getElementById("fullscreen-button");
 
+// Modal Elements
+const confirmModal = document.getElementById("custom-confirm-modal");
+const modalMessage = document.getElementById("modal-message");
+const modalConfirmBtn = document.getElementById("modal-confirm-btn");
+const modalCancelBtn = document.getElementById("modal-cancel-btn");
+
+// --- CUSTOM CONFIRMATION LOGIC ---
+
+let currentConfirmCallback = null;
+
+const showCustomConfirm = (message, onConfirm) => {
+    modalMessage.innerText = message;
+    confirmModal.style.display = "flex";
+    currentConfirmCallback = onConfirm;
+};
+
+// Initialize Modal Listeners once
+modalConfirmBtn.addEventListener("click", () => {
+    confirmModal.style.display = "none";
+    if (currentConfirmCallback) {
+        currentConfirmCallback();
+        currentConfirmCallback = null;
+    }
+});
+
+modalCancelBtn.addEventListener("click", () => {
+    confirmModal.style.display = "none";
+    currentConfirmCallback = null;
+});
+
 // --- LOCAL STORAGE PERSISTENCE ---
 
 const saveTierlistState = () => {
@@ -111,13 +141,13 @@ const createRowElement = (name = "NEW", color = "#333") => {
     });
 
     row.querySelector(".btn-delete-row").addEventListener("click", () => {
-        if (confirm("¿Eliminar esta fila? Las imágenes volverán al contenedor.")) {
+        showCustomConfirm("¿Eliminar esta fila? Las imágenes volverán al contenedor.", () => {
             const items = row.querySelectorAll(".draggable-image");
             items.forEach(item => imgsAddedContainer.appendChild(item));
             row.remove();
             refreshSortables();
             saveTierlistState();
-        }
+        });
     });
 
     row.querySelector(".btn-move-up").addEventListener("click", () => {
@@ -220,11 +250,11 @@ const resetTierlist = () => {
 
 // DELETE ALL ITEMS
 const deleteAllItems = () => {
-    if (confirm("¿Estás seguro de que quieres eliminar todas las imágenes?")) {
+    showCustomConfirm("¿Estás seguro de que quieres eliminar todas las imágenes?", () => {
         document.querySelectorAll(".draggable-image").forEach(item => item.remove());
         refreshSortables();
         saveTierlistState();
-    }
+    });
 };
 
 // ADD IMAGES FUNCTION
