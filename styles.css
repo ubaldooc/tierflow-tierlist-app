@@ -79,10 +79,12 @@ body {
     display: flex;
     min-height: 80px;
     border-radius: 12px;
-    overflow: hidden;
+    overflow: visible;
+    /* For color picker */
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid var(--glass-border);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
 }
 
 .row:hover {
@@ -91,48 +93,20 @@ body {
 }
 
 .row-name {
-    width: 80px;
-    min-width: 80px;
+    width: 100px;
+    min-width: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #000;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.1);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2);
     outline: none;
     cursor: text;
-    transition: opacity 0.2s ease;
-}
-
-.row-name:focus {
-    opacity: 0.8;
-}
-
-/* Tier Specific Colors & Glows */
-.row[data-tier="S"] .row-name {
-    background: var(--color-s);
-    box-shadow: inset -5px 0 15px rgba(0, 0, 0, 0.2);
-}
-
-.row[data-tier="A"] .row-name {
-    background: var(--color-a);
-    box-shadow: inset -5px 0 15px rgba(0, 0, 0, 0.2);
-}
-
-.row[data-tier="B"] .row-name {
-    background: var(--color-b);
-    box-shadow: inset -5px 0 15px rgba(0, 0, 0, 0.2);
-}
-
-.row[data-tier="C"] .row-name {
-    background: var(--color-c);
-    box-shadow: inset -5px 0 15px rgba(0, 0, 0, 0.2);
-}
-
-.row[data-tier="E"] .row-name {
-    background: var(--color-d);
-    box-shadow: inset -5px 0 15px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease;
+    padding: 0.5rem;
+    text-align: center;
 }
 
 .row-items {
@@ -143,11 +117,75 @@ body {
     padding: 0.5rem;
     gap: 0.5rem;
     min-height: 80px;
-    background: rgba(15, 17, 19, 0.4);
+}
+
+/* Row Actions */
+.row-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.5rem;
+    gap: 0.4rem;
+    border-left: 1px solid var(--glass-border);
+}
+
+.row-actions button {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.row-actions button:hover {
+    color: var(--text-main);
+    transform: scale(1.2);
+}
+
+.row-actions input[type="color"] {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: 1px solid var(--glass-border);
+    border-radius: 4px;
+    cursor: pointer;
+    background: none;
 }
 
 .row-items-hover {
     background: rgba(255, 255, 255, 0.05);
+}
+
+/* Add Row Button */
+.add-row-container {
+    padding-top: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-add-row {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    padding: 0.6rem 1.5rem;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-add-row:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
 }
 
 /* Floating Toolbar */
