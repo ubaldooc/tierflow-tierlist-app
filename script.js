@@ -133,6 +133,25 @@ const createRowElement = (name = "NEW", color = "#333") => {
 
     // Events for the new row
     const nameDiv = row.querySelector(".row-name");
+
+    // Auto-select text on click/focus
+    nameDiv.addEventListener("focus", () => {
+        setTimeout(() => {
+            document.execCommand('selectAll', false, null);
+        }, 0);
+    });
+
+    // Handle Enter and ESC keys
+    nameDiv.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            nameDiv.blur();
+        }
+        if (e.key === "Escape") {
+            nameDiv.blur();
+        }
+    });
+
     nameDiv.addEventListener("input", saveTierlistState);
 
     row.querySelector("input[type='color']").addEventListener("input", (e) => {
