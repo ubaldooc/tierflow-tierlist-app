@@ -1,89 +1,111 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi App Tierlist</title>
+    <title>Premium Tier List Maker</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 </head>
+
 <body>
 
     <header class="header-logo">
-        <img src="Tierlist Logo.png" alt="" class="tierlist-logo">
+        <img src="Tierlist Logo.png" alt="Tierlist Logo" class="tierlist-logo">
+        <h1
+            style="font-size: 1rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-top: 1rem;">
+            Crea tu Tier List</h1>
     </header>
 
-    
     <section class="tierlist">
         <div class="tier-container" id="tierlist">
-            <div class="row" style="background-color: #fe8083;">
+            <div class="row" data-tier="S">
                 <div class="row-name" contenteditable="true" spellcheck="false">S</div>
                 <div class="row-items"></div>
             </div>
-            <div class="row" style="background-color: #ffba53;">
+            <div class="row" data-tier="A">
                 <div class="row-name" contenteditable="true" spellcheck="false">A</div>
                 <div class="row-items"></div>
             </div>
-            <div class="row" style="background-color: #f3eb0b;">
+            <div class="row" data-tier="B">
                 <div class="row-name" contenteditable="true" spellcheck="false">B</div>
                 <div class="row-items"></div>
             </div>
-            <div class="row" style="background-color: #acf14a;">
+            <div class="row" data-tier="C">
                 <div class="row-name" contenteditable="true" spellcheck="false">C</div>
                 <div class="row-items"></div>
             </div>
-            <div class="row" style="background-color: #4ab9f1;">
+            <div class="row" data-tier="E">
                 <div class="row-name" contenteditable="true" spellcheck="false">E</div>
                 <div class="row-items"></div>
             </div>
         </div>
 
         <section id="tier-buttons">
-            <label>
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-circle-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M9 12h6" /><path d="M12 9v6" /></svg>
-                 <!-- El primer input solo permite imagenes y el segundo permite videos tambien, elije el que quieras -->
-                <!-- <input type="file" multiple accept="image/*" id="id_addImg-btn" class="addImg-btn" hidden>  -->
+            <label title="Añadir Imágenes">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7" />
+                    <line x1="16" y1="5" x2="22" y2="5" />
+                    <line x1="19" y1="2" x2="19" y2="8" />
+                    <circle cx="9" cy="9" r="2" />
+                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+                </svg>
                 <input type="file" multiple accept="image/*,video/*" id="id_addImg-btn" class="addImg-btn" hidden>
             </label>
 
-            <button id="reset-tier-button">
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-rotate-clockwise"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4.05 11a8 8 0 1 1 .5 4m-.5 5v-5h5" /></svg>
-            </button> 
-            <button id="save-tier-button">
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>
+            <button id="reset-tier-button" title="Limpiar Tierlist">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                </svg>
             </button>
-            
+
+            <button id="save-tier-button" title="Descargar como Imagen">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+            </button>
+
             <section class="delete-section">
-                <div id="delete-zone">
+                <div id="delete-zone" title="Arrastra aquí para eliminar">
                     <div>Arrastre aqui para eliminar</div>
                 </div>
-                <button id="delete-button">
-                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                <button id="delete-button" title="Eliminar todo">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 6h18" />
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                        <line x1="10" y1="11" x2="10" y2="17" />
+                        <line x1="14" y1="11" x2="14" y2="17" />
+                    </svg>
                 </button>
-                <span>Eliminar todo</span>
             </section>
-
-            <div class="tierlist_load-indicator"></div>
-            <div class="tierlist_load-indicator_progress"></div>
-
-            <div id="drop-warning" style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb; border-radius: 5px; z-index: 1000;">
-                Por favor, suelte el archivo dentro de la caja negra
-            </div>
         </section>
 
+        <div style="margin-top: 3rem; margin-bottom: 1rem;">
+            <h2 style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">
+                Imágenes sin clasificar</h2>
+        </div>
         <div class="imgs-added_container" id="id_imgs-added_container"></div>
 
-
-
-      
+        <div id="drop-warning"
+            style="display:none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background-color: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb; border-radius: 5px; z-index: 1000;">
+            Por favor, suelte el archivo dentro del área de carga
+        </div>
     </section>
 
-
-
     <script src="script.js"></script>
-    
+
 </body>
+
 </html>
