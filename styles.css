@@ -33,7 +33,7 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    padding: 2rem 1rem;
+    padding: 0.5rem 1rem;
     padding-bottom: 160px;
     /* Space for the dock */
     overflow-x: hidden;
@@ -41,19 +41,26 @@ body {
 
 /* Header & Logo */
 .header-logo {
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.3rem;
 }
 
 .tierlist-logo {
-    height: 60px;
+    height: 40px;
     filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
     user-select: none;
     pointer-events: none;
     transform: scale(1.1);
+}
+
+.header-text {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 /* Tierlist Container */
