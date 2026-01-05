@@ -16,7 +16,7 @@ const captureArea = document.getElementById("id_capture-area");
 let saveTimeout;
 const debounceSave = () => {
     clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(saveTierlistState, 500);
+    saveTimeout = setTimeout(saveTierlistState, 3000);
 };
 
 const adjustFontSize = (el) => {
