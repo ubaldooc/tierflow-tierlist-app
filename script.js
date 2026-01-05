@@ -457,11 +457,26 @@ captureButton.addEventListener('click', () => {
     html2canvas(tierlistSection, {
         useCORS: true,
         backgroundColor: "#0f1113",
-        scale: 2
+        scale: 2,
+        onclone: (clonedDoc) => {
+            // Hide UI elements that shouldn't be in the final image
+            const addRowContainer = clonedDoc.querySelector(".add-row-container");
+            if (addRowContainer) addRowContainer.style.display = "none";
+
+            // Hide row controls (move, delete, color picker)
+            clonedDoc.querySelectorAll(".row-actions").forEach(el => {
+                el.style.display = "none";
+            });
+
+            // Optional: Remove the border between row name and items for a cleaner look
+            clonedDoc.querySelectorAll(".row-name").forEach(el => {
+                el.style.borderRight = "none";
+            });
+        }
     }).then(canvas => {
         const link = document.createElement('a');
         link.href = canvas.toDataURL('image/png');
-        link.download = 'Mi-Tierlist.png';
+        link.download = `${tierlistTitle.innerText || 'Mi-Tierlist'}.png`;
         link.click();
     }).catch(err => {
         console.error("Error al capturar:", err);
