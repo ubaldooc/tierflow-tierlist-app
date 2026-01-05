@@ -352,10 +352,20 @@ const commonSortableOptions = {
     animation: 200,
     helper: "clone",
     revert: 150,
+    appendTo: "body", // Clona al body para salir del contexto de z-index del contenedor
+    zIndex: 1000,     // Lo pone por encima de todo (el dock tiene 500)
+    scroll: false,    // Evita saltos de scroll innecesarios
 
     start: function (event, ui) {
-        ui.placeholder.css('width', ui.item.width());
-        ui.placeholder.css('height', ui.item.height());
+        // Aseguramos que el placeholder tenga el tamaño correcto de la imagen (80px)
+        ui.placeholder.css({
+            'width': ui.item.outerWidth() + 'px',
+            'height': ui.item.outerHeight() + 'px',
+            'visibility': 'visible'
+        });
+
+        // Estilo sutil para que se vea que lo llevas "en el aire"
+        ui.helper.css('opacity', '0.8');
     },
 
     stop: function () {
