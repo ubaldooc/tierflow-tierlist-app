@@ -66,16 +66,16 @@ body {
 /* Tierlist Container */
 .tierlist {
     width: 100%;
-    max-width: 1000px;
+    /* max-width: 94%; */
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    /* gap: 2rem; */
 }
 
 .tier-container {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    /* gap: 0.2rem; */
     background: var(--glass-bg);
     padding: 0.75rem;
     border-radius: 1.5rem;
@@ -140,7 +140,7 @@ body {
 .row-name {
     width: 115px;
     min-width: 115px;
-    height: 80px;
+    height: 115px;
     display: flex;
     align-items: center;
     justify-content: center;
