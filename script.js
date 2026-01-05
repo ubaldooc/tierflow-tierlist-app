@@ -8,6 +8,8 @@ const deleteButton = document.getElementById("delete-button");
 const mainTierlistContainer = document.getElementById("tierlist");
 const addRowBtn = document.getElementById("id_add-row-btn");
 const newTierBtn = document.getElementById("new-tier-button");
+const tierlistTitle = document.getElementById("id_tierlist-title");
+const tierlistSection = document.querySelector(".tierlist");
 
 // UTILS
 const adjustFontSize = (el) => {
@@ -68,6 +70,7 @@ modalCancelBtn.addEventListener("click", () => {
 
 const saveTierlistState = () => {
     const state = {
+        title: tierlistTitle.innerText,
         rows: [],
         unranked: []
     };
@@ -98,6 +101,7 @@ const loadTierlistState = () => {
 
     try {
         const state = JSON.parse(savedState);
+        if (state.title) tierlistTitle.innerText = state.title;
         mainTierlistContainer.innerHTML = ""; // Clear default rows
 
         state.rows.forEach(rowData => {
@@ -378,6 +382,7 @@ const addImagesToContainer = (filesToAdd) => {
 // EXPORT JSON
 const exportToJson = () => {
     const state = {
+        title: tierlistTitle.innerText,
         rows: [],
         unranked: []
     };
@@ -415,6 +420,7 @@ const importFromJson = (e) => {
     reader.onload = (event) => {
         try {
             const state = JSON.parse(event.target.result);
+            if (state.title) tierlistTitle.innerText = state.title;
             mainTierlistContainer.innerHTML = "";
             state.rows.forEach(rowData => {
                 const newRow = createRowElement(rowData.name, rowData.color);
@@ -447,8 +453,8 @@ const importFromJson = (e) => {
 
 // SNAPSHOT CAPTURE
 captureButton.addEventListener('click', () => {
-    if (!mainTierlistContainer) return;
-    html2canvas(mainTierlistContainer, {
+    if (!tierlistSection) return;
+    html2canvas(tierlistSection, {
         useCORS: true,
         backgroundColor: "#0f1113",
         scale: 2
@@ -495,6 +501,7 @@ imgsAddedContainer.addEventListener('drop', (e) => {
 });
 
 // EVENT LISTENERS
+tierlistTitle.addEventListener("input", saveTierlistState);
 newTierBtn.addEventListener("click", resetToDefaultTierlist);
 resetTierButton.addEventListener("click", resetTierlist);
 deleteButton.addEventListener("click", deleteAllItems);

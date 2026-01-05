@@ -84,6 +84,39 @@ body {
     /* gap: 2rem; */
 }
 
+/* Tierlist Header Title */
+.tierlist-title-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.tierlist-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    padding: 0.5rem 2rem;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    outline: none;
+    border: 1px solid transparent;
+    cursor: text;
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.tierlist-title:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--glass-border);
+}
+
+.tierlist-title:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+}
+
 .tier-container {
     display: flex;
     flex-direction: column;
