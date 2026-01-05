@@ -39,28 +39,40 @@ body {
     overflow-x: hidden;
 }
 
-/* Header & Logo */
-.header-logo {
-    margin-bottom: 1rem;
+/* Main Header Layout */
+.header-container {
+    width: 100%;
+    max-width: 1200px;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.3rem;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem 2rem;
+    background: var(--glass-bg);
+    border-radius: 1.5rem;
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .tierlist-logo {
-    height: 40px;
-    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+    height: 35px;
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.3));
     user-select: none;
     pointer-events: none;
-    transform: scale(1.1);
 }
 
 .header-text {
-    font-size: 0.6rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 2px;
+    font-weight: 700;
 }
 
 /* Tierlist Container */
@@ -220,30 +232,21 @@ body {
     box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
 }
 
-/* Floating Toolbar (Sidebar) */
+/* Toolbar in Header */
 #tier-buttons {
-    position: fixed;
-    right: 2rem;
-    top: 50%;
-    transform: translateY(-50%);
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    background: var(--bg-sidebar);
-    padding: 1rem;
-    border-radius: 2rem;
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(16px);
-    z-index: 100;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    flex-direction: row;
+    gap: 0.75rem;
+    align-items: center;
 }
 
-#tier-buttons button {
-    width: 50px;
-    height: 50px;
-    border-radius: 1rem;
+#tier-buttons button,
+#tier-buttons label {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
     border: 1px solid var(--glass-border);
-    background: var(--glass-bg);
+    background: rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -252,16 +255,17 @@ body {
     color: var(--text-main);
 }
 
-#tier-buttons button:hover {
+#tier-buttons button:hover,
+#tier-buttons label:hover {
     background: var(--accent);
     color: white;
-    transform: scale(1.1);
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
 }
 
 #tier-buttons svg {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 }
 
 /* Bottom Dock */
@@ -541,15 +545,7 @@ body {
 
 /* Responsive */
 @media (max-width: 1200px) {
-    #tier-buttons {
-        position: relative;
-        flex-direction: row;
-        right: auto;
-        top: auto;
-        transform: none;
-        margin: 2rem auto;
-        width: fit-content;
-    }
+    /* Toolbar already in header, no special rules needed anymore */
 }
 
 @media (max-width: 600px) {
