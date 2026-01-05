@@ -12,6 +12,58 @@ const tierlistTitle = document.getElementById("id_tierlist-title");
 const tierlistSection = document.querySelector(".tierlist");
 const captureArea = document.getElementById("id_capture-area");
 
+// --- INDEXEDDB PERSISTENCE LAYER ---
+const DB_NAME = "TierlistPremiumDB";
+const STORE_NAME = "stateStore";
+const DB_VERSION = 1;
+
+let db;
+
+const initDB = () => {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onupgradeneeded = (event) => {
+            const dbInstance = event.target.result;
+            if (!dbInstance.objectStoreNames.contains(STORE_NAME)) {
+                dbInstance.createObjectStore(STORE_NAME);
+            }
+        };
+
+        request.onsuccess = (event) => {
+            db = event.target.result;
+            resolve(db);
+        };
+
+        request.onerror = (event) => {
+            console.error("IndexedDB error:", event.target.error);
+            reject(event.target.error);
+        };
+    });
+};
+
+const saveToDB = (key, data) => {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], "readwrite");
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.put(data, key);
+
+        request.onsuccess = () => resolve();
+        request.onerror = (event) => reject(event.target.error);
+    });
+};
+
+const getFromDB = (key) => {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], "readonly");
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.get(key);
+
+        request.onsuccess = (event) => resolve(event.target.result);
+        request.onerror = (event) => reject(event.target.error);
+    });
+};
+
 // UTILS
 let saveTimeout;
 const debounceSave = () => {
@@ -99,9 +151,11 @@ modalCancelBtn.addEventListener("click", () => {
     currentConfirmCallback = null;
 });
 
-// --- LOCAL STORAGE PERSISTENCE ---
+// --- PERSISTENCE LOGIC ---
 
-const saveTierlistState = () => {
+const saveTierlistState = async () => {
+    if (!db) return;
+
     const state = {
         title: tierlistTitle.innerText,
         rows: [],
@@ -125,15 +179,20 @@ const saveTierlistState = () => {
         src: item.src
     }));
 
-    localStorage.setItem("tierlist_premium_state", JSON.stringify(state));
+    try {
+        await saveToDB("current_state", state);
+    } catch (err) {
+        console.error("Failed to save state to IndexedDB:", err);
+    }
 };
 
-const loadTierlistState = () => {
-    const savedState = localStorage.getItem("tierlist_premium_state");
-    if (!savedState) return;
+const loadTierlistState = async () => {
+    if (!db) return;
 
     try {
-        const state = JSON.parse(savedState);
+        const state = await getFromDB("current_state");
+        if (!state) return;
+
         if (state.title) tierlistTitle.innerText = state.title;
         mainTierlistContainer.innerHTML = ""; // Clear default rows
 
@@ -159,7 +218,7 @@ const loadTierlistState = () => {
 
         refreshSortables();
     } catch (e) {
-        console.error("Error loading state:", e);
+        console.error("Error loading state from IndexedDB:", e);
     }
 };
 
@@ -305,21 +364,38 @@ const refreshSortables = () => {
 };
 
 // Initialize
-$(() => {
+$(async () => {
     // Initial sortable for existing/default containers
     $("#id_imgs-added, #delete-zone").sortable(commonSortableOptions).disableSelection();
 
-    // Load saved data OR create defaults if empty
-    const saved = localStorage.getItem("tierlist_premium_state");
-    if (saved) {
-        loadTierlistState();
-    } else {
-        // Create default rows if nothing is saved
-        const defaults = [
-            { n: "S", c: "#ff4d4d" }, { n: "A", c: "#ff9f43" },
-            { n: "B", c: "#feca57" }, { n: "C", c: "#1dd1a1" }, { n: "E", c: "#54a0ff" }
-        ];
-        defaults.forEach(d => mainTierlistContainer.appendChild(createRowElement(d.n, d.c)));
+    try {
+        await initDB();
+
+        // Check for old localStorage data and migrate if exists
+        const oldData = localStorage.getItem("tierlist_premium_state");
+        const existingDBContent = await getFromDB("current_state");
+
+        if (oldData && !existingDBContent) {
+            console.log("Migrating legacy localStorage data to IndexedDB...");
+            const state = JSON.parse(oldData);
+            await saveToDB("current_state", state);
+            localStorage.removeItem("tierlist_premium_state");
+        }
+
+        // Load saved data OR create defaults if empty
+        const state = await getFromDB("current_state");
+        if (state) {
+            await loadTierlistState();
+        } else {
+            // Create default rows if nothing is saved
+            const defaults = [
+                { n: "S", c: "#ff4d4d" }, { n: "A", c: "#ff9f43" },
+                { n: "B", c: "#feca57" }, { n: "C", c: "#1dd1a1" }, { n: "E", c: "#54a0ff" }
+            ];
+            defaults.forEach(d => mainTierlistContainer.appendChild(createRowElement(d.n, d.c)));
+        }
+    } catch (err) {
+        console.error("Initialization error:", err);
     }
 });
 
