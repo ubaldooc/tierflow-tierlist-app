@@ -13,24 +13,19 @@ const tierlistSection = document.querySelector(".tierlist");
 const captureArea = document.getElementById("id_capture-area");
 
 // UTILS
+let saveTimeout;
+const debounceSave = () => {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(saveTierlistState, 500);
+};
+
 const adjustFontSize = (el) => {
-    const minSize = 0.8; // rem
-    const maxSize = 2.0; // rem 
-    let currentSize = maxSize;
-
-    el.style.fontSize = currentSize + "rem";
-
-    // Use actual box dimensions (approx 80px height, 115px width)
-    const limitH = el.clientHeight || 80;
-    const limitW = el.clientWidth || 115;
-
-    // Shrink only if content exceeds the visible box
-    while (currentSize > minSize) {
-        if (el.scrollHeight <= limitH && el.scrollWidth <= limitW) {
-            break;
-        }
-        currentSize -= 0.1;
-        el.style.fontSize = currentSize + "rem";
+    // Simplified: Just ensure it doesn't break layout, CSS will handle the rest
+    // We'll remove the expensive while loop for performance
+    if (el.innerText.length > 20) {
+        el.style.fontSize = "0.9rem";
+    } else {
+        el.style.fontSize = "1.15rem";
     }
 };
 const exportJsonBtn = document.getElementById("export-json-button");
@@ -182,26 +177,11 @@ const createRowElement = (name = "NEW", color = "#333") => {
             nameDiv.blur();
             return;
         }
-
-        // Permitir teclas de control
-        const isControlKey = e.key === "Backspace" || e.key === "Delete" || e.key.startsWith("Arrow") || e.ctrlKey || e.metaKey;
-        if (isControlKey) return;
-
-        // Permitir escribir si hay selección (se va a reemplazar)
-        const hasSelection = window.getSelection().toString().length > 0;
-
-        // Bloquear si excede 40 chars y no hay selección
-        if (nameDiv.innerText.length >= 40 && !hasSelection) {
-            e.preventDefault();
-        }
     });
 
     nameDiv.addEventListener("input", () => {
-        if (nameDiv.innerText.length > 40) {
-            nameDiv.innerText = nameDiv.innerText.substring(0, 40);
-        }
         adjustFontSize(nameDiv);
-        saveTierlistState();
+        debounceSave(); // Efficient saving
     });
 
     // Initial font adjustment
@@ -209,7 +189,7 @@ const createRowElement = (name = "NEW", color = "#333") => {
 
     row.querySelector("input[type='color']").addEventListener("input", (e) => {
         nameDiv.style.backgroundColor = e.target.value;
-        saveTierlistState();
+        debounceSave();
     });
 
     row.querySelector(".btn-delete-row").addEventListener("click", () => {
@@ -561,7 +541,7 @@ imgsAddedContainer.addEventListener('drop', (e) => {
 });
 
 // EVENT LISTENERS
-tierlistTitle.addEventListener("input", saveTierlistState);
+tierlistTitle.addEventListener("input", debounceSave);
 newTierBtn.addEventListener("click", resetToDefaultTierlist);
 resetTierButton.addEventListener("click", resetTierlist);
 deleteButton.addEventListener("click", deleteAllItems);
