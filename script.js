@@ -1,6 +1,6 @@
 // DOM ELEMENTS
 const dropWarning = document.getElementById("drop-warning");
-const imgsAddedContainer = document.getElementById("id_imgs-added_container");
+const imgsAddedContainer = document.getElementById("id_imgs-added");
 const addImgBtn = document.getElementById("id_addImg-btn");
 const resetTierButton = document.getElementById("reset-tier-button");
 const captureButton = document.getElementById("save-tier-button");
@@ -225,7 +225,7 @@ function rgbToHex(rgb) {
 // --- JQUERY SORTABLE CONFIGURATION ---
 
 const commonSortableOptions = {
-    connectWith: ".row-items, #id_imgs-added_container, #delete-zone",
+    connectWith: ".row-items, #id_imgs-added, #delete-zone",
     items: ".draggable-image",
     placeholder: "sortable-placeholder",
     animation: 200,
@@ -251,13 +251,13 @@ const commonSortableOptions = {
 };
 
 const refreshSortables = () => {
-    $(".row-items, #id_imgs-added_container").sortable("refresh");
+    $(".row-items, #id_imgs-added").sortable("refresh");
 };
 
 // Initialize
 $(() => {
     // Initial sortable for existing/default containers
-    $("#id_imgs-added_container, #delete-zone").sortable(commonSortableOptions).disableSelection();
+    $("#id_imgs-added, #delete-zone").sortable(commonSortableOptions).disableSelection();
 
     // Load saved data OR create defaults if empty
     const saved = localStorage.getItem("tierlist_premium_state");
