@@ -87,6 +87,7 @@ body {
 .row {
     display: flex;
     min-height: 80px;
+    max-height: 80px;
     border-radius: 12px;
     overflow: visible;
     background: rgba(0, 0, 0, 0.2);
