@@ -194,27 +194,39 @@ const loadTierlistState = async () => {
         if (!state) return;
 
         if (state.title) tierlistTitle.innerText = state.title;
-        mainTierlistContainer.innerHTML = ""; // Clear default rows
+
+        // Use DocumentFragment to batch DOM updates for better performance
+        const rowFragment = document.createDocumentFragment();
 
         state.rows.forEach(rowData => {
             const newRow = createRowElement(rowData.name, rowData.color);
-            mainTierlistContainer.appendChild(newRow);
-
             const rowItemsDiv = newRow.querySelector(".row-items");
+
+            const itemFragment = document.createDocumentFragment();
             rowData.items.forEach(itemData => {
                 const el = createMediaElement(itemData.src, itemData.type === 'video');
-                rowItemsDiv.appendChild(el);
+                itemFragment.appendChild(el);
             });
+
+            rowItemsDiv.appendChild(itemFragment);
+            rowFragment.appendChild(newRow);
+
             // Apply font adjustment for loaded rows
             setTimeout(() => adjustFontSize(newRow.querySelector(".row-name")), 0);
         });
 
-        // Load unranked
-        imgsAddedContainer.innerHTML = "";
+        mainTierlistContainer.innerHTML = "";
+        mainTierlistContainer.appendChild(rowFragment);
+
+        // Load unranked using fragment as well
+        const unrankedFragment = document.createDocumentFragment();
         state.unranked.forEach(itemData => {
             const el = createMediaElement(itemData.src, itemData.type === 'video');
-            imgsAddedContainer.appendChild(el);
+            unrankedFragment.appendChild(el);
         });
+
+        imgsAddedContainer.innerHTML = "";
+        imgsAddedContainer.appendChild(unrankedFragment);
 
         refreshSortables();
     } catch (e) {

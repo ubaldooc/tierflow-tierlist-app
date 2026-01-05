@@ -152,8 +152,7 @@ body {
     border: 1px solid var(--glass-border);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
     position: relative;
-    /* margin-bottom: 4px; */
-    /* Tighter rows */
+    will-change: transform, border-color;
 }
 
 .row:hover {
@@ -340,6 +339,7 @@ body {
     z-index: 500;
     box-shadow: 0 -10px 50px rgba(0, 0, 0, 0.6);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    will-change: transform;
 }
 
 .imgs-added_container::before {
@@ -444,6 +444,7 @@ body {
     align-items: center;
     justify-content: flex-start;
     scrollbar-width: thin;
+    will-change: scroll-position;
 }
 
 .imgs-added::-webkit-scrollbar {
@@ -471,7 +472,7 @@ body {
     transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.2s ease, box-shadow 0.2s ease;
     border: 2px solid var(--glass-border);
     background: var(--bg-card);
-    will-change: transform;
+    will-change: transform, opacity, border-color;
 }
 
 /* Disable transitions only during drag to prevent lag */
