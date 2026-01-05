@@ -5,10 +5,31 @@ const addImgBtn = document.getElementById("id_addImg-btn");
 const resetTierButton = document.getElementById("reset-tier-button");
 const captureButton = document.getElementById("save-tier-button");
 const deleteButton = document.getElementById("delete-button");
-const deleteZone = document.getElementById("delete-zone");
 const mainTierlistContainer = document.getElementById("tierlist");
 const addRowBtn = document.getElementById("id_add-row-btn");
 const newTierBtn = document.getElementById("new-tier-button");
+
+// UTILS
+const adjustFontSize = (el) => {
+    const minSize = 0.8; // rem
+    const maxSize = 2.0; // rem 
+    let currentSize = maxSize;
+
+    el.style.fontSize = currentSize + "rem";
+
+    // Use actual box dimensions (approx 80px height, 115px width)
+    const limitH = el.clientHeight || 80;
+    const limitW = el.clientWidth || 115;
+
+    // Shrink only if content exceeds the visible box
+    while (currentSize > minSize) {
+        if (el.scrollHeight <= limitH && el.scrollWidth <= limitW) {
+            break;
+        }
+        currentSize -= 0.1;
+        el.style.fontSize = currentSize + "rem";
+    }
+};
 const exportJsonBtn = document.getElementById("export-json-button");
 const importJsonInput = document.getElementById("import-json-input");
 const fullscreenBtn = document.getElementById("fullscreen-button");
@@ -88,6 +109,8 @@ const loadTierlistState = () => {
                 const el = createMediaElement(itemData.src, itemData.type === 'video');
                 rowItemsDiv.appendChild(el);
             });
+            // Apply font adjustment for loaded rows
+            setTimeout(() => adjustFontSize(newRow.querySelector(".row-name")), 0);
         });
 
         // Load unranked
@@ -137,6 +160,7 @@ const createRowElement = (name = "NEW", color = "#333") => {
 
     // Auto-select text on click/focus
     nameDiv.addEventListener("focus", () => {
+        adjustFontSize(nameDiv);
         setTimeout(() => {
             document.execCommand('selectAll', false, null);
         }, 0);
@@ -171,8 +195,12 @@ const createRowElement = (name = "NEW", color = "#333") => {
         if (nameDiv.innerText.length > 40) {
             nameDiv.innerText = nameDiv.innerText.substring(0, 40);
         }
+        adjustFontSize(nameDiv);
         saveTierlistState();
     });
+
+    // Initial font adjustment
+    setTimeout(() => adjustFontSize(nameDiv), 0);
 
     row.querySelector("input[type='color']").addEventListener("input", (e) => {
         nameDiv.style.backgroundColor = e.target.value;
@@ -396,6 +424,8 @@ const importFromJson = (e) => {
                     const el = createMediaElement(itemData.src, itemData.type === 'video');
                     rowItemsDiv.appendChild(el);
                 });
+                // Adjust font for imported rows
+                setTimeout(() => adjustFontSize(newRow.querySelector(".row-name")), 0);
             });
 
             imgsAddedContainer.innerHTML = "";
