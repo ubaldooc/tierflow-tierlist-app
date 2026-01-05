@@ -28,6 +28,43 @@ const adjustFontSize = (el) => {
         el.style.fontSize = "1.15rem";
     }
 };
+
+const compressImage = (file, maxWidth = 400) => {
+    return new Promise((resolve) => {
+        if (!file.type.startsWith('image/')) {
+            // For non-images (like videos), we return the original DataURL or just skip
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(file);
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth) {
+                    height = (maxWidth / width) * height;
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Export as webp (more efficient) or jpeg if not supported
+                resolve(canvas.toDataURL('image/webp', 0.8));
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    });
+};
 const exportJsonBtn = document.getElementById("export-json-button");
 const importJsonInput = document.getElementById("import-json-input");
 const fullscreenBtn = document.getElementById("fullscreen-button");
@@ -331,33 +368,27 @@ const deleteAllItems = () => {
 };
 
 // ADD IMAGES FUNCTION
-const addImagesToContainer = (filesToAdd) => {
+const addImagesToContainer = async (filesToAdd) => {
     if (!filesToAdd.length) return;
-    const fragment = document.createDocumentFragment();
-    let processed = 0;
 
-    Array.from(filesToAdd).forEach(file => {
+    // Show a small hint or visual feedback if you want, 
+    // but for now let's just process them.
+
+    for (const file of Array.from(filesToAdd)) {
         if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const element = createMediaElement(e.target.result, file.type.startsWith('video/'));
-                fragment.appendChild(element);
-                processed++;
-                if (processed === filesToAdd.length) {
-                    imgsAddedContainer.appendChild(fragment);
-                    refreshSortables();
-                    saveTierlistState();
-                }
-            };
-            reader.readAsDataURL(file);
-        } else {
-            processed++;
-            if (processed === filesToAdd.length) {
-                refreshSortables();
-                saveTierlistState();
+            try {
+                // Compress images before adding them to stay within localStorage limits
+                const finalSrc = await compressImage(file);
+                const element = createMediaElement(finalSrc, file.type.startsWith('video/'));
+                imgsAddedContainer.appendChild(element);
+            } catch (err) {
+                console.error("Error processing file:", err);
             }
         }
-    });
+    }
+
+    refreshSortables();
+    saveTierlistState();
 };
 
 // EXPORT JSON
