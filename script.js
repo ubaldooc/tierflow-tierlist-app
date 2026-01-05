@@ -10,6 +10,7 @@ const addRowBtn = document.getElementById("id_add-row-btn");
 const newTierBtn = document.getElementById("new-tier-button");
 const tierlistTitle = document.getElementById("id_tierlist-title");
 const tierlistSection = document.querySelector(".tierlist");
+const captureArea = document.getElementById("id_capture-area");
 
 // UTILS
 const adjustFontSize = (el) => {
@@ -453,22 +454,66 @@ const importFromJson = (e) => {
 
 // SNAPSHOT CAPTURE
 captureButton.addEventListener('click', () => {
-    if (!tierlistSection) return;
-    html2canvas(tierlistSection, {
+    if (!captureArea) return;
+    html2canvas(captureArea, {
         useCORS: true,
         backgroundColor: "#0f1113",
         scale: 2,
         onclone: (clonedDoc) => {
-            // Hide UI elements that shouldn't be in the final image
+            const areaClone = clonedDoc.getElementById("id_capture-area");
+            if (areaClone) {
+                // Formatting the capture area for a wide/professional look
+                areaClone.style.width = "1200px";
+                areaClone.style.maxWidth = "1200px";
+                areaClone.style.padding = "60px 40px 80px 40px"; // Extra bottom padding for watermark
+                areaClone.style.display = "flex";
+                areaClone.style.flexDirection = "column";
+                areaClone.style.gap = "20px";
+                areaClone.style.position = "relative";
+                areaClone.style.margin = "0 auto";
+            }
+
+            // Hide UI elements
             const addRowContainer = clonedDoc.querySelector(".add-row-container");
             if (addRowContainer) addRowContainer.style.display = "none";
 
-            // Hide row controls (move, delete, color picker)
+            // Hide the entire real header for the capture
+            const realHeader = clonedDoc.querySelector(".header-container");
+            if (realHeader) realHeader.style.display = "none";
+
+            // Create a professional watermark/branding in the Corner
+            const watermark = clonedDoc.createElement("div");
+            watermark.style.position = "absolute";
+            watermark.style.bottom = "25px";
+            watermark.style.right = "40px";
+            watermark.style.display = "flex";
+            watermark.style.alignItems = "center";
+            watermark.style.gap = "12px";
+            watermark.style.opacity = "0.8";
+
+            // Use the logo in the watermark
+            const logoInWatermark = clonedDoc.createElement("img");
+            logoInWatermark.src = "Tierlist Logo.png";
+            logoInWatermark.style.height = "30px";
+            logoInWatermark.style.filter = "drop-shadow(0 0 5px rgba(255,255,255,0.2))";
+
+            const brandText = clonedDoc.createElement("span");
+            brandText.innerText = "Hecho con Premium Tier List";
+            brandText.style.color = "#94a3b8";
+            brandText.style.fontSize = "0.9rem";
+            brandText.style.fontWeight = "600";
+            brandText.style.letterSpacing = "1px";
+
+            watermark.appendChild(brandText);
+            watermark.appendChild(logoInWatermark);
+            areaClone.appendChild(watermark);
+
+            // Hide row controls
             clonedDoc.querySelectorAll(".row-actions").forEach(el => {
                 el.style.display = "none";
             });
 
-            // Optional: Remove the border between row name and items for a cleaner look
+            // Refine row name border for a cleaner look
             clonedDoc.querySelectorAll(".row-name").forEach(el => {
                 el.style.borderRight = "none";
             });

@@ -14,91 +14,93 @@
 
 <body>
 
-    <header class="header-container">
-        <div class="header-logo">
-            <img src="Tierlist Logo.png" alt="Tierlist Logo" class="tierlist-logo">
-            <h1 class="header-text">Crea tu Tier List</h1>
-        </div>
+    <div id="id_capture-area">
+        <header class="header-container">
+            <div class="header-logo">
+                <img src="Tierlist Logo.png" alt="Tierlist Logo" class="tierlist-logo">
+                <h1 class="header-text">Crea tu Tier List</h1>
+            </div>
 
-        <section id="tier-buttons">
-            <button id="new-tier-button" title="Nueva Tierlist (Reiniciar todo)">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                    <polyline points="14 2 14 8 20 8"></polyline>
-                    <line x1="12" y1="18" x2="12" y2="12"></line>
-                    <line x1="9" y1="15" x2="15" y2="15"></line>
-                </svg>
-            </button>
+            <section id="tier-buttons">
+                <button id="new-tier-button" title="Nueva Tierlist (Reiniciar todo)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                </button>
 
-            <button id="reset-tier-button" title="Limpiar Tierlist">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                    <path d="M3 3v5h5" />
-                </svg>
-            </button>
+                <button id="reset-tier-button" title="Limpiar Tierlist">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                    </svg>
+                </button>
 
-            <button id="save-tier-button" title="Descargar como Imagen">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-            </button>
+                <button id="save-tier-button" title="Descargar como Imagen">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                </button>
 
-            <button id="export-json-button" title="Exportar Datos (JSON)">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="17 16 12 21 7 16" />
-                    <line x1="12" y1="21" x2="12" y2="9" />
-                    <path d="M7 3h10" />
-                </svg>
-            </button>
+                <button id="export-json-button" title="Exportar Datos (JSON)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="17 16 12 21 7 16" />
+                        <line x1="12" y1="21" x2="12" y2="9" />
+                        <path d="M7 3h10" />
+                    </svg>
+                </button>
 
-            <label id="import-json-label" title="Importar Datos (JSON)">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 5 17 10" />
-                    <line x1="12" y1="5" x2="12" y2="17" />
-                    <path d="M17 21H7" />
-                </svg>
-                <input type="file" id="import-json-input" accept=".json" hidden>
-            </label>
+                <label id="import-json-label" title="Importar Datos (JSON)">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 5 17 10" />
+                        <line x1="12" y1="5" x2="12" y2="17" />
+                        <path d="M17 21H7" />
+                    </svg>
+                    <input type="file" id="import-json-input" accept=".json" hidden>
+                </label>
 
-            <button id="fullscreen-button" title="Pantalla Completa">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path
-                        d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-                </svg>
-            </button>
+                <button id="fullscreen-button" title="Pantalla Completa">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                    </svg>
+                </button>
+            </section>
+        </header>
+
+        <section class="tierlist">
+            <div class="tierlist-title-container">
+                <h2 class="tierlist-title" id="id_tierlist-title" contenteditable="true" spellcheck="false">Mi Tier List
+                </h2>
+            </div>
+            <div class="tier-container" id="tierlist">
+                <!-- Rows are generated by JS -->
+            </div>
+
+            <div class="add-row-container">
+                <button class="btn-add-row" id="id_add-row-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Añadir Fila
+                </button>
+            </div>
         </section>
-    </header>
-
-    <section class="tierlist">
-        <div class="tierlist-title-container">
-            <h2 class="tierlist-title" id="id_tierlist-title" contenteditable="true" spellcheck="false">Mi Tier List
-            </h2>
-        </div>
-        <div class="tier-container" id="tierlist">
-            <!-- Rows are generated by JS -->
-        </div>
-
-        <div class="add-row-container">
-            <button class="btn-add-row" id="id_add-row-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                Añadir Fila
-            </button>
-        </div>
-    </section>
+    </div>
 
     <div class="imgs-added_container">
         <label class="dock-btn upload-btn" title="Añadir Imágenes">
