@@ -464,27 +464,39 @@ const deleteAllItems = () => {
 };
 
 // ADD IMAGES FUNCTION
+// Loading Indicator
+const loadingIndicator = document.getElementById("loading-indicator");
+
 const addImagesToContainer = async (filesToAdd) => {
     if (!filesToAdd.length) return;
 
-    // Show a small hint or visual feedback if you want, 
-    // but for now let's just process them.
+    // Show loading
+    loadingIndicator.style.display = "flex";
 
-    for (const file of Array.from(filesToAdd)) {
-        if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
-            try {
+    // Use fragment for batch insertion
+    const fragment = document.createDocumentFragment();
+
+    try {
+        for (const file of Array.from(filesToAdd)) {
+            if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
                 // Compress images before adding them to stay within localStorage limits
                 const finalSrc = await compressImage(file);
                 const element = createMediaElement(finalSrc, file.type.startsWith('video/'));
-                imgsAddedContainer.appendChild(element);
-            } catch (err) {
-                console.error("Error processing file:", err);
+                fragment.appendChild(element);
             }
         }
-    }
 
-    refreshSortables();
-    saveTierlistState();
+        // Single DOM update
+        imgsAddedContainer.appendChild(fragment);
+
+        refreshSortables();
+        saveTierlistState();
+    } catch (err) {
+        console.error("Error processing files:", err);
+    } finally {
+        // Hide loading
+        loadingIndicator.style.display = "none";
+    }
 };
 
 // EXPORT JSON
