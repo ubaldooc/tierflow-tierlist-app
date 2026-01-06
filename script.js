@@ -466,18 +466,30 @@ const deleteAllItems = () => {
 // ADD IMAGES FUNCTION
 // Loading Indicator
 const loadingIndicator = document.getElementById("loading-indicator");
+const progressText = document.getElementById("progress-text");
 
 const addImagesToContainer = async (filesToAdd) => {
     if (!filesToAdd.length) return;
 
     // Show loading
     loadingIndicator.style.display = "flex";
+    if (progressText) progressText.innerText = "Preparando archivos...";
 
     // Use fragment for batch insertion
     const fragment = document.createDocumentFragment();
+    const totalFiles = filesToAdd.length;
+    let processedCount = 0;
 
     try {
         for (const file of Array.from(filesToAdd)) {
+            processedCount++;
+            if (progressText) {
+                progressText.innerText = `Procesando imagen ${processedCount} de ${totalFiles}...`;
+            }
+
+            // Give the UI a moment to update the text before locking up with compression
+            await new Promise(resolve => requestAnimationFrame(resolve));
+
             if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
                 // Compress images before adding them to stay within localStorage limits
                 const finalSrc = await compressImage(file);
@@ -486,6 +498,7 @@ const addImagesToContainer = async (filesToAdd) => {
             }
         }
 
+        if (progressText) progressText.innerText = "Finalizando...";
         // Single DOM update
         imgsAddedContainer.appendChild(fragment);
 
@@ -496,6 +509,7 @@ const addImagesToContainer = async (filesToAdd) => {
     } finally {
         // Hide loading
         loadingIndicator.style.display = "none";
+        if (progressText) progressText.innerText = "Procesando imágenes..."; // Reset text
     }
 };
 
