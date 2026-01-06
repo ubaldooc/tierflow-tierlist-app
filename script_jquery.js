@@ -238,10 +238,9 @@ const createMediaElement = (src, isVideo) => {
     const element = document.createElement(isVideo ? 'video' : 'img');
     element.src = src;
     element.classList.add('draggable-image');
-    // Prevent native drag interactions which conflict with SortableJS forceFallback
-    element.setAttribute('draggable', 'false');
-
-    if (isVideo) {
+    if (!isVideo) {
+        element.setAttribute('draggable', true);
+    } else {
         element.style.objectFit = "cover";
     }
     return element;
@@ -328,7 +327,7 @@ const createRowElement = (name = "NEW", color = "#333") => {
     });
 
     // Re-init sortable for the new row
-    initSortable(row.querySelector(".row-items"));
+    $(row.querySelector(".row-items")).sortable(commonSortableOptions).disableSelection();
 
     return row;
 };
@@ -346,47 +345,50 @@ function rgbToHex(rgb) {
 
 // --- JQUERY SORTABLE CONFIGURATION ---
 
-// --- SORTABLEJS CONFIGURATION ---
+const commonSortableOptions = {
+    connectWith: ".row-items, #id_imgs-added, #delete-zone",
+    items: ".draggable-image",
+    placeholder: "sortable-placeholder",
+    animation: 200,
+    helper: "clone",
+    revert: 150,
+    appendTo: "body", // Clona al body para salir del contexto de z-index del contenedor
+    zIndex: 1000,     // Lo pone por encima de todo (el dock tiene 500)
+    scroll: false,    // Evita saltos de scroll innecesarios
 
-const initSortable = (el, isDeleteZone = false) => {
-    new Sortable(el, {
-        group: {
-            name: 'shared',
-            pull: isDeleteZone ? false : true, // Delete zone accepts items but doesn't give them back (if needed, but usually we just remove)
-            put: true
-        },
-        animation: 200,
-        delay: 0,
-        ghostClass: 'sortable-placeholder', // Reuse existing class if possible or define new
-        chosenClass: 'sortable-chosen',
-        dragClass: 'sortable-drag',
-        forceFallback: true, // Crucial for z-index control
-        fallbackOnBody: true, // Appends clonded element to body
+    start: function (event, ui) {
+        // Aseguramos que el placeholder tenga el tamaño correcto de la imagen (80px)
+        ui.placeholder.css({
+            'width': ui.item.outerWidth() + 'px',
+            'height': ui.item.outerHeight() + 'px',
+            'visibility': 'visible'
+        });
 
-        onEnd: function (evt) {
-            saveTierlistState();
-        },
+        // Estilo sutil para que se vea que lo llevas "en el aire"
+        ui.helper.css('opacity', '0.8');
+    },
 
-        onAdd: function (evt) {
-            if (isDeleteZone) {
-                evt.item.remove();
-            }
-            saveTierlistState();
+    stop: function () {
+        saveTierlistState();
+    },
+
+    receive: function (event, ui) {
+        if (this.id === 'delete-zone') {
+            ui.item.remove();
         }
-    });
+        refreshSortables();
+        saveTierlistState();
+    }
 };
 
 const refreshSortables = () => {
-    // No-op for SortableJS as it handles DOM changes automatically
-    // We only need to init on new containers
+    $(".row-items, #id_imgs-added").sortable("refresh");
 };
 
-// function removed as it is defined above as no-op
-
-document.addEventListener('DOMContentLoaded', async () => {
+// Initialize
+$(async () => {
     // Initial sortable for existing/default containers
-    initSortable(document.getElementById("id_imgs-added"));
-    initSortable(document.getElementById("delete-zone"), true);
+    $("#id_imgs-added, #delete-zone").sortable(commonSortableOptions).disableSelection();
 
     try {
         await initDB();

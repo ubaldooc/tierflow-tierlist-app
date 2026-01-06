@@ -473,11 +473,13 @@ body {
     border: 2px solid var(--glass-border);
     background: var(--bg-card);
     will-change: transform, opacity, border-color;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 /* Disable transitions only during drag to prevent lag */
-.ui-sortable-helper,
-.ui-sortable-placeholder {
+.sortable-fallback,
+.sortable-ghost {
     transition: none !important;
 }
 
@@ -488,19 +490,28 @@ body {
     z-index: 10;
 }
 
-/* Prevent hover effects from fighting with drag position */
-.ui-sortable-helper.draggable-image:hover {
-    transform: none !important;
-}
-
 .draggable-image:active {
     cursor: grabbing;
 }
 
-/* Sortable Placeholders */
+/* Ensure the dragged clone (fallback) is always on top */
+.sortable-fallback {
+    position: fixed;
+    /* SortableJS uses fixed/absolute */
+    z-index: 9999 !important;
+    pointer-events: none;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
+    /* Slight pop effect */
+}
+
+/* Hide the original item while dragging if using forceFallback? 
+   Sortable adds sortable-ghost to the item in the list.
+   We want the ghost to be the placeholder visual.
+*/
+
 .sortable-placeholder {
-    width: 65px;
-    height: 65px;
+    opacity: 0.4;
     background: rgba(255, 255, 255, 0.05);
     border: 2px dashed var(--accent);
     border-radius: 8px;
