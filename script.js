@@ -650,7 +650,7 @@ captureButton.addEventListener('click', () => {
 
             // Use the logo in the watermark
             const logoInWatermark = clonedDoc.createElement("img");
-            logoInWatermark.src = "Tierlist Logo.png";
+            logoInWatermark.src = "logo.png";
             logoInWatermark.style.height = "30px";
             logoInWatermark.style.filter = "drop-shadow(0 0 5px rgba(255,255,255,0.2))";
 
