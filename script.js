@@ -622,7 +622,7 @@ captureButton.addEventListener('click', () => {
                 // Formatting the capture area for a wide/professional look
                 areaClone.style.width = "1200px";
                 areaClone.style.maxWidth = "1200px";
-                areaClone.style.padding = "60px 40px 80px 40px"; // Extra bottom padding for watermark
+                areaClone.style.padding = "15px 40px 45px 40px"; // Further reduced margins
                 areaClone.style.display = "flex";
                 areaClone.style.flexDirection = "column";
                 areaClone.style.gap = "20px";
@@ -641,7 +641,7 @@ captureButton.addEventListener('click', () => {
             // Create a professional watermark/branding in the Corner
             const watermark = clonedDoc.createElement("div");
             watermark.style.position = "absolute";
-            watermark.style.bottom = "25px";
+            watermark.style.bottom = "10px";
             watermark.style.right = "40px";
             watermark.style.display = "flex";
             watermark.style.alignItems = "center";
