@@ -325,14 +325,14 @@ body {
     transform: none;
     width: 100%;
     /* Occupy full width */
-    height: 100px;
+    height: 120px;
     /* More compact dock */
     background: rgba(26, 29, 33, 0.95);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-bottom: none;
     border-radius: 1.5rem 1.5rem 0 0;
-    padding: 1.5rem 1rem 5px 1rem;
+    padding: 1.4rem 0.8rem 5px 0.8rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -445,6 +445,11 @@ body {
     justify-content: flex-start;
     scrollbar-width: thin;
     will-change: scroll-position;
+    margin-left: 1rem;
+}
+
+.imgs-added::-webkit-scrollbar {
+    width: 4px;
 }
 
 .imgs-added::-webkit-scrollbar {
