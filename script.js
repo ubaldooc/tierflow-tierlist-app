@@ -655,7 +655,7 @@ captureButton.addEventListener('click', () => {
             logoInWatermark.style.filter = "drop-shadow(0 0 5px rgba(255,255,255,0.2))";
 
             const brandText = clonedDoc.createElement("span");
-            brandText.innerText = "Hecho con Premium Tier List";
+            brandText.innerText = "Hecho con TierFlow";
             brandText.style.color = "#94a3b8";
             brandText.style.fontSize = "0.9rem";
             brandText.style.fontWeight = "600";
