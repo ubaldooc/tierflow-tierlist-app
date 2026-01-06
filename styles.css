@@ -325,7 +325,7 @@ body {
     transform: none;
     width: 100%;
     /* Occupy full width */
-    height: 120px;
+    height: 124px;
     /* More compact dock */
     background: rgba(26, 29, 33, 0.95);
     backdrop-filter: blur(20px);
@@ -467,7 +467,7 @@ body {
 
 /* Media Items */
 .draggable-image {
-    height: 80px;
+    height: 92px;
     /* width: 65px; */
     /* min-width: 65px; */
     aspect-ratio: 1/1;
@@ -480,6 +480,11 @@ body {
     will-change: transform, opacity, border-color;
     user-select: none;
     -webkit-user-drag: none;
+}
+
+/* PONGO ESTO AQUI PARA QUE LAS IMAGENES EN EL CONTENEDOR SIN CLASIFICACION SEAN MAS PEQUEÑAS Y NO TENER QUE AUMENTAR LA ALTURA DEL CONTENEDOR, escribo esto como recordatorio por si me da problemas */
+.imgs-added>* {
+    height: 80px;
 }
 
 /* Disable transitions only during drag to prevent lag */
