@@ -151,6 +151,30 @@ modalCancelBtn.addEventListener("click", () => {
     currentConfirmCallback = null;
 });
 
+// Help Modal Logic
+const helpButton = document.getElementById("help-button");
+const helpModal = document.getElementById("help-modal");
+const closeHelpBtn = document.getElementById("close-help-btn");
+const closeHelpActionBtn = document.getElementById("close-help-action-btn");
+
+const openHelp = () => helpModal.style.display = "flex";
+const closeHelp = () => helpModal.style.display = "none";
+
+if (helpButton) helpButton.addEventListener("click", openHelp);
+if (closeHelpBtn) closeHelpBtn.addEventListener("click", closeHelp);
+if (closeHelpActionBtn) closeHelpActionBtn.addEventListener("click", closeHelp);
+
+// Close modals when clicking outside
+window.addEventListener("click", (e) => {
+    if (e.target === confirmModal) {
+        confirmModal.style.display = "none";
+        currentConfirmCallback = null;
+    }
+    if (e.target === helpModal) {
+        closeHelp();
+    }
+});
+
 // --- PERSISTENCE LOGIC ---
 
 const saveTierlistState = async () => {
