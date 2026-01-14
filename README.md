@@ -2,6 +2,12 @@
 
 Una aplicación web moderna y eficiente para crear Tier Lists personalizadas. Diseñada con un enfoque en la estética, el rendimiento y la privacidad del usuario.
 
+![TierFlow Preview](./preview.webp)
+
+## 🎥 Demo
+
+![TierFlow Demo](./demo.gif)
+
 ## 🚀 Características Principales
 
 *   **Drag & Drop Fluido:** Sistema impulsado por **SortableJS** para una experiencia de arrastrar y soltar suave, precisa y compatible con dispositivos móviles.
